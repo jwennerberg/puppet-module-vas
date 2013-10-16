@@ -77,19 +77,25 @@ computers_ou
 ------------
 Path to OU where to store computer object.
 
-- *Default*: 'ou=computers,dc=example,dc=com'
+Example: 'ou=computers,dc=example,dc=com'
+
+- *Default*: undef
 
 users_ou
 --------
 Path to OU where to load users initially.
 
-- *Default*: 'ou=users,dc=example,dc=com'
+Example: 'ou=users,dc=example,dc=com'
+
+- *Default*: undef
 
 nismaps_ou
 ----------
 Path to OU where to load nismaps initially.
 
-- *Default*: 'ou=nismaps,dc=example,dc=com'
+Example: 'ou=nismaps,dc=example,dc=com'
+
+- *Default*: undef
 
 realm
 -----
