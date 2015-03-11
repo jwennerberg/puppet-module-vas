@@ -127,9 +127,9 @@ keytab file's mode.
 
 vas_fqdn
 --------
-FQDN to join to VAS as.
+FQDN to join to VAS as. Defaults to $::fqdn if unset.
 
-- *Default*: $::fqdn
+- *Default*: undef
 
 computers_ou
 ------------

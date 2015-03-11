@@ -17,7 +17,7 @@ class vas (
   $keytab_owner                                         = 'root',
   $keytab_group                                         = 'root',
   $keytab_mode                                          = '0400',
-  $vas_fqdn                                             = $::fqdn,
+  $vas_fqdn                                             = undef,
   $computers_ou                                         = 'UNSET',
   $users_ou                                             = 'UNSET',
   $nismaps_ou                                           = 'ou=nismaps,dc=example,dc=com',
@@ -164,8 +164,13 @@ class vas (
     create_resources(file, $license_files, $license_files_defaults)
   }
 
-  if !is_domain_name($vas_fqdn) {
-    fail("vas::vas_fqdn is not a valid FQDN. Detected value is <${vas_fqdn}>.")
+  if $vas_fqdn {
+    $vas_fqdn_real = $vas_fqdn
+  } else {
+    $vas_fqdn_real = $::fqdn
+  }
+  if !is_domain_name($vas_fqdn_real) {
+    fail("vas::vas_fqdn is not a valid FQDN. Detected value is <${vas_fqdn_real}>.")
   }
 
   if is_string($users_allow_hiera_merge) {
@@ -466,7 +471,7 @@ class vas (
   $once_file = '/etc/opt/quest/vas/puppet_joined'
 
   exec { 'vasinst':
-    command => "${vastool_binary} -u ${username} -k ${keytab_path} -d3 join -f ${workstation_flag} -c ${computers_ou} ${user_search_path_parm} ${group_search_path_parm} ${upm_search_path_parm} -n ${vas_fqdn} ${s_opts} ${realm} > ${vasjoin_logfile} 2>&1 && touch ${once_file}",
+    command => "${vastool_binary} -u ${username} -k ${keytab_path} -d3 join -f ${workstation_flag} -c ${computers_ou} ${user_search_path_parm} ${group_search_path_parm} ${upm_search_path_parm} -n ${vas_fqdn_real} ${s_opts} ${realm} > ${vasjoin_logfile} 2>&1 && touch ${once_file}",
     path    => '/bin:/usr/bin:/opt/quest/bin',
     timeout => 1800,
     creates => $once_file,
