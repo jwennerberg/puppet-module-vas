@@ -86,7 +86,7 @@ describe 'vas' do
         it { should contain_file('vas_config').with_content(/forwardable = true/) }
         it { should contain_file('vas_config').with_content(/update-process = \/opt\/quest\/libexec\/vas\/mapupdate_2307/) }
         it { should contain_file('vas_config').with_content(/update-interval = 600/) }
-        it { should contain_file('vas_config').with_content(/upm-computerou-attr = department/) }
+        it { should contain_file('vas_config').without_content(/upm-computerou-attr = department/) }
         it { should contain_file('vas_config').with_content(/workstation-mode = false/) }
         it { should contain_file('vas_config').with_content(/lazy-cache-update-interval = 10/) }
         it { should contain_file('vas_config').with_content(/auth-helper-timeout = 10/) }
