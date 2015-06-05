@@ -147,7 +147,7 @@ describe 'vas' do
           should contain_service('vasd').with({
             'ensure'  => 'running',
             'enable'  => 'true',
-            'require' => 'Exec[vasinst]',
+            'require' => 'Exec[vastool_join]',
           })
         }
 
@@ -159,7 +159,7 @@ describe 'vas' do
           })
         }
 
-        it { should contain_exec('vasinst').with_command(/\/opt\/quest\/bin\/vastool -u username -k \/etc\/vasinst.key -d3 join -f  -c ou=computers,dc=example,dc=com -p ou=users,dc=example,dc=com -n host.example.com  realm.example.com > \/var\/tmp\/vasjoin.log 2>&1 && touch \/etc\/opt\/quest\/vas\/puppet_joined/) }
+        it { should contain_exec('vastool_join').with_command(/\/opt\/quest\/bin\/vastool -u username -k \/etc\/vasinst.key -d3 join -f  -c ou=computers,dc=example,dc=com -p ou=users,dc=example,dc=com -n host.example.com  realm.example.com > \/var\/tmp\/vasjoin.log 2>&1 && touch \/etc\/opt\/quest\/vas\/puppet_joined/) }
 
       end
     end
