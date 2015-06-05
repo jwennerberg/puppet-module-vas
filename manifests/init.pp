@@ -348,25 +348,25 @@ class vas (
   }
 
   if $user_search_path != undef {
-    $user_search_path_parm = "-u ${user_search_path}"
+    $user_search_path_flag = "-u ${user_search_path}"
   } else {
-    $user_search_path_parm = ""
+    $user_search_path_flag = ""
   }
   if $group_search_path != undef {
-    $group_search_path_parm = "-u ${group_search_path}"
+    $group_search_path_flag = "-u ${group_search_path}"
   } else {
-    $group_search_path_parm = ""
+    $group_search_path_flag = ""
   }
   if $upm_search_path != undef {
-    $upm_search_path_parm = "-u ${upm_search_path}"
+    $upm_search_path_flag = "-u ${upm_search_path}"
   } else {
-    $upm_search_path_parm = ""
+    $upm_search_path_flag = ""
   }
 
   $once_file = '/etc/opt/quest/vas/puppet_joined'
 
   exec { 'vastool_join':
-    command => "${vastool_binary} ${auth_flags} ${join_debug_flag} join -f ${workstation_flag} -c ${computer_object_container} ${user_search_path_parm} ${group_search_path_parm} ${upm_search_path_parm} -n ${computer_object_name_real} ${site_flag} ${realm} > ${vasjoin_logfile} 2>&1 && touch ${once_file}",
+    command => "${vastool_binary} ${auth_flags} ${join_debug_flag} join -f ${workstation_flag} -c ${computer_object_container} ${user_search_path_flag} ${group_search_path_flag} ${upm_search_path_flag} -n ${computer_object_name_real} ${site_flag} ${realm} > ${vasjoin_logfile} 2>&1 && touch ${once_file}",
     path    => '/bin:/usr/bin:/sbin:/usr/sbin:/opt/quest/bin',
     timeout => 1800,
     creates => $once_file,
