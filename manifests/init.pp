@@ -23,6 +23,7 @@ class vas (
   $join_keytab_group                                    = 'root',
   $join_keytab_mode                                     = '0400',
   $join_debug_flag                                      = undef,
+  $join_timeout                                         = 1800,
   $computer_object_name                                 = undef,
   $computer_object_container                            = undef,
   $user_search_path                                     = undef,
@@ -71,6 +72,7 @@ class vas (
   validate_absolute_path($vas_users_deny_path)
   validate_absolute_path($vas_user_override_path)
   validate_absolute_path($vas_group_override_path)
+  validate_integer($join_timeout)
 
   if $license_files != undef {
     validate_hash($license_files)
@@ -368,7 +370,7 @@ class vas (
   exec { 'vastool_join':
     command => "${vastool_binary} ${auth_flags} ${join_debug_flag} join -f ${workstation_flag} -c ${computer_object_container} ${user_search_path_flag} ${group_search_path_flag} ${upm_search_path_flag} -n ${computer_object_name_real} ${site_flag} ${realm} > ${vasjoin_logfile} 2>&1 && touch ${once_file}",
     path    => '/bin:/usr/bin:/sbin:/usr/sbin:/opt/quest/bin',
-    timeout => 1800,
+    timeout => $join_timeout,
     creates => $once_file,
     require => [Package['vasclnt','vasgp'],File['join_keytab']],
   }
