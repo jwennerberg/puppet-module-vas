@@ -5,7 +5,7 @@
 class vas (
   $package_version                                      = undef,
   $enable_group_policies                                = true,
-  $enable_nis                                           = true,
+  $enable_nis                                           = false,
   $manage_nss                                           = true,
   $manage_pam                                           = true,
   $users_allow_entries                                  = undef,
