@@ -35,19 +35,23 @@ class vas (
   $vas_config_owner                                     = 'root',
   $vas_config_group                                     = 'root',
   $vas_config_mode                                      = '0644',
-  $vas_user_override_path                               = undef,
+  $vas_user_override_ensure                             = 'present',
+  $vas_user_override_path                               = '/etc/opt/quest/vas/user-override',
   $vas_user_override_owner                              = 'root',
   $vas_user_override_group                              = 'root',
   $vas_user_override_mode                               = '0644',
-  $vas_group_override_path                              = undef,
+  $vas_group_override_ensure                            = 'present',
+  $vas_group_override_path                              = '/etc/opt/quest/vas/group-override',
   $vas_group_override_owner                             = 'root',
   $vas_group_override_group                             = 'root',
   $vas_group_override_mode                              = '0644',
-  $vas_users_allow_path                                 = undef,
+  $vas_users_allow_ensure                               = 'present',
+  $vas_users_allow_path                                 = '/etc/opt/quest/vas/users.allow',
   $vas_users_allow_owner                                = 'root',
   $vas_users_allow_group                                = 'root',
   $vas_users_allow_mode                                 = '0644',
-  $vas_users_deny_path                                  = undef,
+  $vas_users_deny_ensure                                = 'present',
+  $vas_users_deny_path                                  = '/etc/opt/quest/vas/users.deny',
   $vas_users_deny_owner                                 = 'root',
   $vas_users_deny_group                                 = 'root',
   $vas_users_deny_mode                                  = '0644',
@@ -56,89 +60,17 @@ class vas (
   $symlink_vastool_binary_target                        = '/usr/bin/vastool',
   $symlink_vastool_binary                               = false,
   $license_files                                        = undef,
-  $solaris_vasclntpath                                  = 'UNSET',
-  $solaris_vasgppath                                    = 'UNSET',
-  $solaris_adminpath                                    = 'UNSET',
-  $solaris_responsepattern                              = 'UNSET',
+  $solaris_vasclntpath                                  = undef,
+  $solaris_vasgppath                                    = undef,
+  $solaris_adminpath                                    = undef,
+  $solaris_responsepattern                              = undef,
 ) {
 
-#  $vas_conf_client_addrs                                = 'UNSET',
-#  $vas_conf_full_update_interval                        = 'UNSET',
-#  $vas_conf_disabled_user_pwhash                        = undef,
-#  $vas_conf_locked_out_pwhash                           = undef,
-#  $vas_conf_preload_nested_memberships                  = 'UNSET',
-#  $vas_conf_update_process                              = '/opt/quest/libexec/vas/mapupdate_2307',
-#  $vas_conf_upm_computerou_attr                         = 'department',
-#  $vas_conf_vasd_update_interval                        = '600',
-#  $vas_conf_vasd_auto_ticket_renew_interval             = '32400',
-#  $vas_conf_vasd_lazy_cache_update_interval             = '10',
-#  $vas_conf_vasd_timesync_interval                      = 'USE_DEFAULTS',
-#  $vas_conf_vasd_cross_domain_user_groups_member_search = 'UNSET',
-#  $vas_conf_vasd_password_change_script                 = 'UNSET',
-#  $vas_conf_vasd_password_change_script_timelimit       = 'UNSET',
-#  $vas_conf_vasd_workstation_mode                       = false,
-#  $vas_conf_vasd_workstation_mode_users_preload         = 'UNSET',
-#  $vas_conf_vasd_workstation_mode_group_do_member       = false,
-#  $vas_conf_vasd_workstation_mode_groups_skip_update    = false,
-#  $vas_conf_vasd_ws_resolve_uid                         = false,
-#  $vas_conf_vasd_deluser_check_timelimit                = 'UNSET',
-#  $vas_conf_vasd_delusercheck_interval                  = 'UNSET',
-#  $vas_conf_vasd_delusercheck_script                    = 'UNSET',
-#  $vas_conf_prompt_vas_ad_pw                            = '"Enter Windows password: "',
-#  $vas_conf_pam_vas_prompt_ad_lockout_msg               = 'UNSET',
-#  $vas_conf_libdefaults_forwardable                     = true,
-#  $vas_conf_vas_auth_uid_check_limit                    = 'UNSET',
-#  $vas_conf_libvas_vascache_ipc_timeout                 = 15,
-#  $vas_conf_libvas_use_server_referrals                 = true,
-#  $vas_conf_libvas_auth_helper_timeout                  = 10,
-#  $vas_conf_libvas_mscldap_timeout                      = 1,
-#  $vas_conf_libvas_site_only_servers                    = false,
-#  $vas_conf_libvas_use_dns_srv                          = true,
-#  $vas_conf_libvas_use_tcp_only                         = true,
-#) {
-
-  $_vas_users_allow_path_default = '/etc/opt/quest/vas/users.allow'
-  $_vas_users_deny_path_default = '/etc/opt/quest/vas/users.deny'
-  $_vas_user_override_path_default = '/etc/opt/quest/vas/user-override'
-  $_vas_group_override_path_default = '/etc/opt/quest/vas/group-override'
-
-#  # validate params
-#  validate_re($vas_conf_vasd_auto_ticket_renew_interval, '^\d+$', "vas::vas_conf_vasd_auto_ticket_renew_interval must be an integer. Detected value is <${vas_conf_vasd_auto_ticket_renew_interval}>.")
-#  validate_re($vas_conf_vasd_update_interval, '^\d+$', "vas::vas_conf_vasd_update_interval must be an integer. Detected value is <${vas_conf_vasd_update_interval}>.")
-#  if $vas_conf_vasd_deluser_check_timelimit != 'UNSET' {
-#    validate_re($vas_conf_vasd_deluser_check_timelimit, '^\d+$', "vas::vas_conf_vasd_deluser_check_timelimit must be an integer. Detected value is <${vas_conf_vasd_deluser_check_timelimit}>.")
-#  }
-#  if $vas_conf_vasd_delusercheck_interval != 'UNSET' {
-#    validate_re($vas_conf_vasd_delusercheck_interval, '^\d+$', "vas::vas_conf_vasd_delusercheck_interval must be an integer. Detected value is <${vas_conf_vasd_delusercheck_interval}>.")
-#  }
-#  validate_re($vas_conf_libvas_vascache_ipc_timeout, '^\d+$', "vas::vas_conf_libvas_vascache_ipc_timeout must be an integer. Detected value is <${vas_conf_libvas_vascache_ipc_timeout}>.")
-#  validate_re($vas_conf_libvas_auth_helper_timeout, '^\d+$', "vas::vas_conf_libvas_auth_helper_timeout must be an integer. Detected value is <${vas_conf_libvas_auth_helper_timeout}>.")
-#  validate_string($vas_conf_prompt_vas_ad_pw)
-
   validate_absolute_path($vas_config_path)
-#  if $vas_conf_vasd_delusercheck_script != 'UNSET' {
-#    validate_absolute_path($vas_conf_vasd_delusercheck_script)
-#  }
-  if $vas_users_allow_path != 'UNSET' {
-    validate_absolute_path($vas_users_allow_path)
-  }
-  if $vas_users_deny_path != 'UNSET' {
-    validate_absolute_path($vas_users_deny_path)
-  }
-  if $vas_user_override_path != 'UNSET' {
-    validate_absolute_path($vas_user_override_path)
-  }
-  if $vas_group_override_path != 'UNSET' {
-    validate_absolute_path($vas_group_override_path)
-  }
-
-#  if $vas_conf_disabled_user_pwhash != undef {
-#    validate_string($vas_conf_disabled_user_pwhash)
-#  }
-#
-#  if $vas_conf_locked_out_pwhash != undef {
-#    validate_string($vas_conf_locked_out_pwhash)
-#  }
+  validate_absolute_path($vas_users_allow_path)
+  validate_absolute_path($vas_users_deny_path)
+  validate_absolute_path($vas_user_override_path)
+  validate_absolute_path($vas_group_override_path)
 
   if $license_files != undef {
     validate_hash($license_files)
@@ -176,58 +108,11 @@ class vas (
   }
   validate_bool($users_deny_hiera_merge_real)
 
-#  if is_string($vas_conf_libdefaults_forwardable) {
-#    $vas_conf_libdefaults_forwardable_real = str2bool($vas_conf_libdefaults_forwardable)
-#  } else {
-#    $vas_conf_libdefaults_forwardable_real = $vas_conf_libdefaults_forwardable
-#  }
-
-#  if is_string($vas_conf_libvas_use_server_referrals) {
-#    $vas_conf_libvas_use_server_referrals_real = str2bool($vas_conf_libvas_use_server_referrals)
-#  } else {
-#    $vas_conf_libvas_use_server_referrals_real = $vas_conf_libvas_use_server_referrals
-#  }
-#
-#  if is_string($vas_conf_libvas_use_dns_srv) {
-#    $vas_conf_libvas_use_dns_srv_real = str2bool($vas_conf_libvas_use_dns_srv)
-#  } else {
-#    $vas_conf_libvas_use_dns_srv_real = $vas_conf_libvas_use_dns_srv
-#  }
-#
-#  if is_string($vas_conf_libvas_use_tcp_only) {
-#    $vas_conf_libvas_use_tcp_only_real = str2bool($vas_conf_libvas_use_tcp_only)
-#  } else {
-#    $vas_conf_libvas_use_tcp_only_real = $vas_conf_libvas_use_tcp_only
-#  }
-#
-#  if is_string($vas_conf_libvas_site_only_servers) {
-#    $vas_conf_libvas_site_only_servers_real = str2bool($vas_conf_libvas_site_only_servers)
-#  } else {
-#    $vas_conf_libvas_site_only_servers_real = $vas_conf_libvas_site_only_servers
-#  }
-#
   if is_string($workstation_mode) {
     $workstation_mode_real = str2bool($workstation_mode)
   } else {
     $workstation_mode_real = $workstation_mode
   }
-#
-#  if is_string($vas_conf_vasd_workstation_mode_group_do_member) {
-#    $vas_conf_vasd_workstation_mode_group_do_member_real = str2bool($vas_conf_vasd_workstation_mode_group_do_member)
-#  } else {
-#    $vas_conf_vasd_workstation_mode_group_do_member_real = $vas_conf_vasd_workstation_mode_group_do_member
-#  }
-#
-#  if is_string($vas_conf_vasd_workstation_mode_groups_skip_update) {
-#    $vas_conf_vasd_workstation_mode_groups_skip_update_real = str2bool($vas_conf_vasd_workstation_mode_groups_skip_update)
-#  } else {
-#    $vas_conf_vasd_workstation_mode_groups_skip_update_real = $vas_conf_vasd_workstation_mode_groups_skip_update
-#  }
-#  if is_string($vas_conf_vasd_ws_resolve_uid) {
-#    $vas_conf_vasd_ws_resolve_uid_real = str2bool($vas_conf_vasd_ws_resolve_uid)
-#  } else {
-#    $vas_conf_vasd_ws_resolve_uid_real = $vas_conf_vasd_ws_resolve_uid
-#  }
 
   if is_string($symlink_vastool_binary) {
     $symlink_vastool_binary_bool = str2bool($symlink_vastool_binary)
@@ -241,28 +126,28 @@ class vas (
   } else {
     $enable_group_policies_real = $enable_group_policies
   }
+  validate_bool($enable_group_policies_real)
 
   if is_string($enable_nis) {
     $enable_nis_real = str2bool($enable_nis)
   } else {
     $enable_nis_real = $enable_nis
   }
+  validate_bool($enable_nis_real)
 
-#  case $::virtual {
-#    'zone': {
-#      $default_vas_conf_vasd_timesync_interval = 0
-#    }
-#    default: {
-#      $default_vas_conf_vasd_timesync_interval = 'UNSET'
-#    }
-#  }
+  if is_string($manage_nss) {
+    $manage_nss_real = str2bool($manage_nss)
+  } else {
+    $manage_nss_real = $manage_nss
+  }
+  validate_bool($manage_nss_real)
 
-#  # Use defaults if a value was not specified in Hiera.
-#  if $vas_conf_vasd_timesync_interval == 'USE_DEFAULTS' {
-#    $vas_conf_vasd_timesync_interval_real = $default_vas_conf_vasd_timesync_interval
-#  } else {
-#    $vas_conf_vasd_timesync_interval_real = $vas_conf_vasd_timesync_interval
-#  }
+  if is_string($manage_pam) {
+    $manage_pam_real = str2bool($manage_pam)
+  } else {
+    $manage_pam_real = $manage_pam
+  }
+  validate_bool($manage_pam_real)
 
   case $::kernel {
     'Linux': {
@@ -286,11 +171,11 @@ class vas (
     }
   }
 
-  if $manage_nss == true {
+  if $manage_nss_real == true {
     include nsswitch
   }
 
-  if $manage_pam == true {
+  if $manage_pam_real == true {
     include pam
   }
 
@@ -371,13 +256,9 @@ class vas (
     require => Package['vasclnt','vasgp'],
   }
 
-  $_vas_users_allow_path = $vas_users_allow_path ? {
-    'UNSET' => $_vas_users_allow_path_default,
-    default => $vas_users_allow_path,
-  }
   file { 'vas_users_allow':
-    ensure  => present,
-    path    => $_vas_users_allow_path,
+    ensure  => $vas_users_allow_ensure,
+    path    => $vas_users_allow_path,
     owner   => $vas_users_allow_owner,
     group   => $vas_users_allow_group,
     mode    => $vas_users_allow_mode,
@@ -385,13 +266,9 @@ class vas (
     require => Package['vasclnt','vasgp'],
   }
 
-  $_vas_users_deny_path = $vas_users_deny_path ? {
-    'UNSET' => $_vas_users_deny_path_default,
-    default => $vas_users_deny_path,
-  }
   file { 'vas_users_deny':
-    ensure  => present,
-    path    => $_vas_users_deny_path,
+    ensure  => $vas_users_deny_ensure,
+    path    => $vas_users_deny_path,
     owner   => $vas_users_deny_owner,
     group   => $vas_users_deny_group,
     mode    => $vas_users_deny_mode,
@@ -399,13 +276,9 @@ class vas (
     require => Package['vasclnt','vasgp'],
   }
 
-  $_vas_user_override_path = $vas_user_override_path ? {
-    'UNSET' => $_vas_user_override_path_default,
-    default => $vas_user_override_path,
-  }
   file { 'vas_user_override':
-    ensure  => present,
-    path    => $_vas_user_override_path,
+    ensure  => $vas_user_override_ensure,
+    path    => $vas_user_override_path,
     owner   => $vas_user_override_owner,
     group   => $vas_user_override_group,
     mode    => $vas_user_override_mode,
@@ -414,13 +287,9 @@ class vas (
     before  => Service['vasd'],
   }
 
-  $_vas_group_override_path = $vas_group_override_path ? {
-    'UNSET' => $_vas_group_override_path_default,
-    default => $vas_group_override_path,
-  }
   file { 'vas_group_override':
-    ensure  => present,
-    path    => $_vas_group_override_path,
+    ensure  => $vas_group_override_ensure,
+    path    => $vas_group_override_path,
     owner   => $vas_group_override_owner,
     group   => $vas_group_override_group,
     mode    => $vas_group_override_mode,
@@ -503,5 +372,4 @@ class vas (
     creates => $once_file,
     require => [Package['vasclnt','vasgp'],File['join_keytab']],
   }
-
 }
